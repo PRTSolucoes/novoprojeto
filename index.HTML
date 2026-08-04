@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Novo Projeto</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:#29415C;
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            padding:30px;
+        }
+
+        .card{
+            width:700px;
+            max-width:100%;
+            background:#fff;
+            border-radius:18px;
+            padding:40px;
+            box-shadow:0 20px 50px rgba(0,0,0,.25);
+        }
+
+        h1{
+            color:#29415C;
+            margin-bottom:35px;
+        }
+
+        .campo{
+            margin-bottom:25px;
+        }
+
+        label{
+            display:block;
+            margin-bottom:8px;
+            font-weight:bold;
+            color:#444;
+        }
+
+        textarea{
+            width:100%;
+            min-height:130px;
+            resize:vertical;
+            border:1px solid #ccc;
+            border-radius:10px;
+            padding:12px;
+            font-size:15px;
+        }
+
+        select{
+            width:100%;
+        }
+
+        button{
+            margin-top:15px;
+            width:100%;
+            border:none;
+            background:#29415C;
+            color:white;
+            padding:15px;
+            border-radius:10px;
+            font-size:16px;
+            cursor:pointer;
+            transition:.2s;
+        }
+
+        button:hover{
+            background:#1f3146;
+        }
+
+        .ts-control{
+            padding:10px !important;
+            border-radius:10px !important;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <h1>Novo Projeto</h1>
+
+    <div class="campo">
+
+        <label>Cliente</label>
+
+        <select id="cliente"></select>
+
+    </div>
+
+    <div class="campo">
+
+        <label>Descrição</label>
+
+        <textarea
+            id="descricao"
+            placeholder="Descreva o projeto..."
+        ></textarea>
+
+    </div>
+
+    <div class="campo">
+
+        <label>Status</label>
+
+        <select id="status">
+
+            <option value="40fcf8c8-9102-412b-9f83-8706082da241" selected>
+                Em Aberto
+            </option>
+
+        </select>
+
+    </div>
+
+    <button onclick="enviar()">
+        Criar Projeto
+    </button>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+
+<script>
+
+let clienteSelect;
+
+fetch("https://prtsolucoes.app.n8n.cloud/webhook/b1cb7562-3d4d-4306-8536-7d4882bd64ae")
+
+.then(r=>r.json())
+
+.then(clientes=>{
+
+    clienteSelect = new TomSelect("#cliente",{
+
+        valueField:"id",
+
+        labelField:"description",
+
+        searchField:"description",
+
+        options:clientes,
+
+        create:false,
+
+        maxItems:1,
+
+        placeholder:"Pesquise um cliente..."
+
+    });
+
+})
+
+.catch(e=>{
+
+    alert("Erro ao carregar clientes.");
+
+    console.error(e);
+
+});
+
+function enviar(){
+
+    const dados={
+
+        clienteId:clienteSelect.getValue(),
+
+        descricao:document.getElementById("descricao").value,
+
+        statusId:document.getElementById("status").value
+
+    };
+
+    console.log(dados);
+
+    // Exemplo para enviar ao n8n futuramente:
+    /*
+    fetch("SEU_WEBHOOK_DE_ENVIO",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify(dados)
+    });
+    */
+
+    alert("Dados preparados para envio!");
+
+}
+
+</script>
+
+</body>
+
+</html>
