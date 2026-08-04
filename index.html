@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Novo Projeto</title>
 
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
@@ -53,7 +52,7 @@
 
         textarea{
             width:100%;
-            min-height:130px;
+            min-height:140px;
             resize:vertical;
             border:1px solid #ccc;
             border-radius:10px;
@@ -79,15 +78,20 @@
         }
 
         button:hover{
-            background:#1f3146;
+            background:#1F3146;
+        }
+
+        button:disabled{
+            opacity:.7;
+            cursor:not-allowed;
         }
 
         .ts-control{
-            padding:10px !important;
             border-radius:10px !important;
+            padding:10px !important;
         }
-
     </style>
+
 </head>
 
 <body>
@@ -97,39 +101,28 @@
     <h1>Novo Projeto</h1>
 
     <div class="campo">
-
         <label>Cliente</label>
-
         <select id="cliente"></select>
-
     </div>
 
     <div class="campo">
-
         <label>Descrição</label>
-
         <textarea
             id="descricao"
             placeholder="Descreva o projeto..."
         ></textarea>
-
     </div>
 
     <div class="campo">
-
         <label>Status</label>
-
         <select id="status">
-
             <option value="40fcf8c8-9102-412b-9f83-8706082da241" selected>
                 Em Aberto
             </option>
-
         </select>
-
     </div>
 
-    <button onclick="enviar()">
+    <button id="btnEnviar" onclick="enviar()">
         Criar Projeto
     </button>
 
@@ -142,10 +135,8 @@
 let clienteSelect;
 
 fetch("https://prtsolucoes.app.n8n.cloud/webhook/b1cb7562-3d4d-4306-8536-7d4882bd64ae")
-
-.then(r=>r.json())
-
-.then(clientes=>{
+.then(r => r.json())
+.then(clientes => {
 
     clienteSelect = new TomSelect("#cliente",{
 
@@ -166,41 +157,99 @@ fetch("https://prtsolucoes.app.n8n.cloud/webhook/b1cb7562-3d4d-4306-8536-7d4882b
     });
 
 })
-
 .catch(e=>{
-
-    alert("Erro ao carregar clientes.");
 
     console.error(e);
 
+    alert("Erro ao carregar clientes.");
+
 });
 
-function enviar(){
+async function enviar(){
 
-    const dados={
+    const customerId = Number(clienteSelect.getValue());
 
-        clienteId:clienteSelect.getValue(),
+    const description = document.getElementById("descricao").value.trim();
 
-        descricao:document.getElementById("descricao").value,
+    const statusId = document.getElementById("status").value;
 
-        statusId:document.getElementById("status").value
+    if(!customerId){
 
-    };
+        alert("Selecione um cliente.");
 
-    console.log(dados);
+        return;
 
-    // Exemplo para enviar ao n8n futuramente:
-    /*
-    fetch("SEU_WEBHOOK_DE_ENVIO",{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body:JSON.stringify(dados)
-    });
-    */
+    }
 
-    alert("Dados preparados para envio!");
+    if(description === ""){
+
+        alert("Informe a descrição do projeto.");
+
+        return;
+
+    }
+
+    const botao = document.getElementById("btnEnviar");
+
+    botao.disabled = true;
+
+    botao.innerHTML = "Criando projeto...";
+
+    try{
+
+        const resposta = await fetch(
+
+            "https://prtsolucoes.app.n8n.cloud/webhook/e5528b92-bec6-432c-b0c8-31fed051bfed",
+
+            {
+
+                method:"POST",
+
+                headers:{
+                    "Content-Type":"application/json"
+                },
+
+                body:JSON.stringify({
+
+                    customerId,
+
+                    description,
+
+                    statusId
+
+                })
+
+            }
+
+        );
+
+        if(!resposta.ok){
+
+            throw new Error("Erro ao criar projeto.");
+
+        }
+
+        const retorno = await resposta.json();
+
+        alert("Projeto criado com sucesso!");
+
+        console.log(retorno);
+
+        clienteSelect.clear();
+
+        document.getElementById("descricao").value="";
+
+    }catch(e){
+
+        console.error(e);
+
+        alert("Erro ao criar projeto.");
+
+    }
+
+    botao.disabled=false;
+
+    botao.innerHTML="Criar Projeto";
 
 }
 
