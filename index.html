@@ -185,6 +185,54 @@
     padding-right: 38px;
   }
 
+  /* ==========================
+   TOM SELECT
+========================== */
+
+.ts-wrapper {
+    width: 100%;
+}
+
+.ts-control {
+    background: #FBFCFD !important;
+    border: 1px solid var(--color-border) !important;
+    border-radius: var(--radius) !important;
+    min-height: 46px;
+    box-shadow: var(--shadow-soft) !important;
+}
+
+.ts-control input {
+    background: transparent !important;
+    color: var(--color-text) !important;
+}
+
+.ts-control input::placeholder {
+    color: #8A94A6 !important;
+}
+
+.ts-dropdown {
+    background: #FFFFFF !important;
+    border: 1px solid var(--color-border) !important;
+    border-radius: var(--radius) !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,.15) !important;
+    overflow: hidden;
+}
+
+.ts-dropdown .option {
+    padding: 10px 14px;
+}
+
+.ts-dropdown .option:hover,
+.ts-dropdown .active {
+    background: #29415C !important;
+    color: white !important;
+}
+
+.ts-wrapper.focus .ts-control {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 4px rgba(41,65,92,.12) !important;
+}
+
   /* Upload de arquivos */
   .file-upload {
     position: relative;
