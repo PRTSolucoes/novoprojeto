@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novo Projeto | PRT Soluções</title>
+
+<!-- TomSelect (única biblioteca externa permitida) -->
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+
+<style>
+  /* ==========================================================
+     RESET E BASE
+  ========================================================== */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --color-bg: #29415C;
+    --color-card: #FFFFFF;
+    --color-primary: #29415C;
+    --color-primary-hover: #1E3247;
+    --color-border: #DDE3EA;
+    --color-text: #1F2A37;
+    --color-text-light: #6B7684;
+    --color-error: #D64545;
+    --color-success: #2E9E5B;
+    --radius: 10px;
+    --shadow-soft: 0 2px 10px rgba(41, 65, 92, 0.08);
+    --shadow-card: 0 20px 60px rgba(15, 25, 40, 0.35);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  body {
+    background: var(--color-bg);
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.06), transparent 40%),
+      radial-gradient(circle at 85% 90%, rgba(255, 255, 255, 0.05), transparent 45%);
+    color: var(--color-text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 56px 20px;
+  }
+
+  /* ==========================================================
+     WRAPPER / CARD
+  ========================================================== */
+  .page-wrapper {
+    width: 100%;
+    max-width: 880px;
+  }
+
+  .brand {
+    text-align: center;
+    color: #EAF0F7;
+    margin-bottom: 28px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0.75;
+  }
+
+  .card {
+    background: var(--color-card);
+    border-radius: 18px;
+    box-shadow: var(--shadow-card);
+    padding: 48px 56px 56px;
+  }
+
+  .card-header {
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .card-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 8px;
+  }
+
+  .card-header p {
+    font-size: 15px;
+    color: var(--color-text-light);
+  }
+
+  /* ==========================================================
+     FORM GRID
+  ========================================================== */
+  form {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 4px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px 24px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .field.full {
+    grid-column: 1 / -1;
+  }
+
+  .field label {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .field label .required-mark {
+    color: var(--color-error);
+    margin-left: 2px;
+  }
+
+  .field .hint {
+    font-size: 12px;
+    color: var(--color-text-light);
+    margin-top: -4px;
+  }
+
+  /* ==========================================================
+     INPUTS
+  ========================================================== */
+  input[type="text"],
+  input[type="date"],
+  select,
+  textarea {
+    width: 100%;
+    font-size: 14.5px;
+    font-family: inherit;
+    color: var(--color-text);
+    background: #FBFCFD;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    box-shadow: var(--shadow-soft);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.5;
+  }
+
+  input[type="text"]:hover,
+  input[type="date"]:hover,
+  select:hover,
+  textarea:hover {
+    border-color: #C3CDD9;
+  }
+
+  input[type="text"]:focus,
+  input[type="date"]:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 4px rgba(41, 65, 92, 0.12);
+  }
+
+  select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1L7 7L13 1' stroke='%236B7684' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 38px;
+  }
+
+  /* Upload de arquivos */
+  .file-upload {
+    position: relative;
+    border: 1.5px dashed var(--color-border);
+    border-radius: var(--radius);
+    background: #FBFCFD;
+    padding: 18px 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+
+  .file-upload:hover {
+    border-color: var(--color-primary);
+    background: #F3F6FA;
+  }
+
+  .file-upload input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .file-upload .file-upload-label {
+    font-size: 13.5px;
+    color: var(--color-text-light);
+  }
+
+  .file-upload .file-upload-label strong {
+    color: var(--color-primary);
+  }
+
+  .file-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .file-list span {
+    font-size: 12.5px;
+    color: var(--color-text-light);
+    background: #F1F4F8;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+
+  /* Erros de validação */
+  .field.invalid input,
+  .field.invalid select,
+  .field.invalid textarea,
+  .field.invalid .file-upload {
+    border-color: var(--color-error) !important;
+    box-shadow: 0 0 0 4px rgba(214, 69, 69, 0.1) !important;
+  }
+
+  .field .error-message {
+    display: none;
+    font-size: 12.5px;
+    color: var(--color-error);
+    font-weight: 500;
+  }
+
+  .field.invalid .error-message {
+    display: block;
+  }
+
+  /* TomSelect - ajustes finos para casar com o design */
+  .ts-wrapper.single .ts-control {
+    border-radius: var(--radius);
+    border: 1px solid var(--color-border);
+    background: #FBFCFD;
+    box-shadow: var(--shadow-soft);
+    padding: 6px 10px;
+    min-height: 44px;
+  }
+
+  .ts-wrapper.single.focus .ts-control {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(41, 65, 92, 0.12);
+  }
+
+  .ts-dropdown {
+    border-radius: var(--radius);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+
+  .ts-dropdown .active {
+    background-color: rgba(41, 65, 92, 0.08);
+    color: var(--color-primary);
+  }
+
+  .field.invalid .ts-wrapper.single .ts-control {
+    border-color: var(--color-error) !important;
+    box-shadow: 0 0 0 4px rgba(214, 69, 69, 0.1) !important;
+  }
+
+  /* ==========================================================
+     BOTÃO
+  ========================================================== */
+  .form-actions {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .submit-feedback {
+    font-size: 13.5px;
+    color: var(--color-text-light);
+  }
+
+  .submit-feedback.success { color: var(--color-success); }
+  .submit-feedback.error { color: var(--color-error); }
+
+  #btn-submit {
+    background: var(--color-primary);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--radius);
+    padding: 14px 32px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.15s ease, transform 0.05s ease;
+    box-shadow: 0 6px 16px rgba(41, 65, 92, 0.3);
+  }
+
+  #btn-submit:hover {
+    background: var(--color-primary-hover);
+  }
+
+  #btn-submit:active {
+    transform: translateY(1px);
+  }
+
+  #btn-submit:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+  }
+
+  .spinner {
+    display: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: #FFFFFF;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+
+  #btn-submit.loading .spinner {
+    display: inline-block;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ==========================================================
+     RESPONSIVO
+  ========================================================== */
+  @media (max-width: 720px) {
+    body {
+      padding: 24px 12px;
+    }
+
+    .card {
+      padding: 32px 22px 36px;
+      border-radius: 14px;
+    }
+
+    .form-grid {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .form-actions {
+      flex-direction: column-reverse;
+      align-items: stretch;
+    }
+
+    #btn-submit {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+  <div class="brand">PRT Soluções</div>
+
+  <div class="card">
+    <div class="card-header">
+      <h1>Novo Projeto</h1>
+      <p>Preencha as informações abaixo para cadastrar um novo projeto.</p>
+    </div>
+
+    <form id="project-form" novalidate>
+      <div class="form-grid">
+
+        <!-- Cliente (TomSelect) -->
+        <div class="field full" data-field="clienteId">
+          <label for="cliente-select">Cliente<span class="required-mark">*</span></label>
+          <select id="cliente-select"></select>
+          <span class="error-message">Selecione um cliente.</span>
+        </div>
+
+        <!-- Orçamento -->
+        <div class="field" data-field="orcamento">
+          <label for="orcamento">Orçamento<span class="required-mark">*</span></label>
+          <input type="text" id="orcamento" name="orcamento" placeholder="Ex: R$ 15.000,00">
+          <span class="error-message">Informe o orçamento.</span>
+        </div>
+
+        <!-- Serviço -->
+        <div class="field" data-field="servico">
+          <label for="servico">Serviço<span class="required-mark">*</span></label>
+          <select id="servico" name="servico">
+            <option value="">Selecione...</option>
+            <option value="Locação">Locação</option>
+            <option value="Venda">Venda</option>
+            <option value="Manutenção">Manutenção</option>
+          </select>
+          <span class="error-message">Selecione o tipo de serviço.</span>
+        </div>
+
+        <!-- Título -->
+        <div class="field full" data-field="titulo">
+          <label for="titulo">Título<span class="required-mark">*</span></label>
+          <input type="text" id="titulo" name="titulo" placeholder="Título do projeto">
+          <span class="error-message">Informe o título do projeto.</span>
+        </div>
+
+        <!-- Escopo -->
+        <div class="field full" data-field="escopo">
+          <label for="escopo">Escopo<span class="required-mark">*</span></label>
+          <textarea id="escopo" name="escopo" placeholder="Descreva o escopo do projeto"></textarea>
+          <span class="error-message">Descreva o escopo do projeto.</span>
+        </div>
+
+        <!-- Fase 1 -->
+        <div class="field full" data-field="fase1">
+          <label for="fase1">Fase 1<span class="required-mark">*</span></label>
+          <textarea id="fase1" name="fase1" placeholder="Descreva a fase 1"></textarea>
+          <span class="error-message">Descreva a fase 1.</span>
+        </div>
+
+        <!-- Fase 2 -->
+        <div class="field full" data-field="fase2">
+          <label for="fase2">Fase 2<span class="required-mark">*</span></label>
+          <textarea id="fase2" name="fase2" placeholder="Descreva a fase 2"></textarea>
+          <span class="error-message">Descreva a fase 2.</span>
+        </div>
+
+        <!-- Fase 3 -->
+        <div class="field full" data-field="fase3">
+          <label for="fase3">Fase 3<span class="required-mark">*</span></label>
+          <textarea id="fase3" name="fase3" placeholder="Descreva a fase 3"></textarea>
+          <span class="error-message">Descreva a fase 3.</span>
+        </div>
+
+        <!-- Observações -->
+        <div class="field full" data-field="observacoes">
+          <label for="observacoes">Observações<span class="required-mark">*</span></label>
+          <textarea id="observacoes" name="observacoes" placeholder="Observações adicionais"></textarea>
+          <span class="error-message">Informe as observações.</span>
+        </div>
+
+        <!-- Vistoria Realizada Por -->
+        <div class="field" data-field="vistoriaRealizadaPor">
+          <label for="vistoria">Vistoria Realizada Por<span class="required-mark">*</span></label>
+          <input type="text" id="vistoria" name="vistoriaRealizadaPor" placeholder="Nome do responsável">
+          <span class="error-message">Informe quem realizou a vistoria.</span>
+        </div>
+
+        <!-- Tempo de Execução -->
+        <div class="field" data-field="tempoExecucao">
+          <label for="tempo-execucao">Tempo de Execução<span class="required-mark">*</span></label>
+          <input type="text" id="tempo-execucao" name="tempoExecucao" placeholder="Ex: 15 dias úteis">
+          <span class="error-message">Informe o tempo de execução.</span>
+        </div>
+
+        <!-- Contato Ciente do Serviço -->
+        <div class="field" data-field="contatoCiente">
+          <label for="contato-ciente">Contato Ciente do Serviço<span class="required-mark">*</span></label>
+          <input type="text" id="contato-ciente" name="contatoCiente" placeholder="Nome do contato">
+          <span class="error-message">Informe o contato ciente do serviço.</span>
+        </div>
+
+        <!-- Expectativa do Cliente -->
+        <div class="field" data-field="expectativaCliente">
+          <label for="expectativa-cliente">Expectativa do Cliente<span class="required-mark">*</span></label>
+          <input type="text" id="expectativa-cliente" name="expectativaCliente" placeholder="Descreva a expectativa">
+          <span class="error-message">Informe a expectativa do cliente.</span>
+        </div>
+
+        <!-- Possui Layout? -->
+        <div class="field" data-field="possuiLayout">
+          <label for="possui-layout">Possui Layout?<span class="required-mark">*</span></label>
+          <select id="possui-layout" name="possuiLayout">
+            <option value="">Selecione...</option>
+            <option value="Sim">Sim</option>
+            <option value="Não">Não</option>
+          </select>
+          <span class="error-message">Selecione uma opção.</span>
+        </div>
+
+        <!-- Possui Vídeos? -->
+        <div class="field" data-field="possuiVideos">
+          <label for="possui-videos">Possui Vídeos?<span class="required-mark">*</span></label>
+          <select id="possui-videos" name="possuiVideos">
+            <option value="">Selecione...</option>
+            <option value="Sim">Sim</option>
+            <option value="Não">Não</option>
+          </select>
+          <span class="error-message">Selecione uma opção.</span>
+        </div>
+
+        <!-- Previsão de Saída -->
+        <div class="field" data-field="previsaoSaida">
+          <label for="previsao-saida">Previsão de Saída<span class="required-mark">*</span></label>
+          <input type="date" id="previsao-saida" name="previsaoSaida">
+          <span class="error-message">Informe a previsão de saída.</span>
+        </div>
+
+        <!-- Contrato -->
+        <div class="field" data-field="contrato">
+          <label for="contrato">Após a implantação desse serviço, entrará em vigor um contrato?<span class="required-mark">*</span></label>
+          <select id="contrato" name="contrato">
+            <option value="">Selecione...</option>
+            <option value="Sim, Locação">Sim, Locação</option>
+            <option value="Sim, Manutenção">Sim, Manutenção</option>
+            <option value="Não, Apenas Garantia">Não, Apenas Garantia</option>
+          </select>
+          <span class="error-message">Selecione uma opção.</span>
+        </div>
+
+        <!-- Anexos -->
+        <div class="field full" data-field="anexos">
+          <label for="anexos">Anexos<span class="required-mark">*</span></label>
+          <div class="file-upload" id="file-upload-area">
+            <input type="file" id="anexos" name="anexos" multiple>
+            <div class="file-upload-label"><strong>Clique para enviar</strong> ou arraste os arquivos aqui</div>
+          </div>
+          <div class="file-list" id="file-list"></div>
+          <span class="error-message">Anexe ao menos um arquivo.</span>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <span class="submit-feedback" id="submit-feedback"></span>
+        <button type="submit" id="btn-submit">
+          <span class="spinner"></span>
+          <span id="btn-submit-text">Criar Projeto</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  /* ==========================================================
+     CONFIGURAÇÃO
+  ========================================================== */
+
+  // Webhook que retorna a lista de clientes para o TomSelect
+  const CLIENTS_WEBHOOK_URL = "https://prtsolucoes.app.n8n.cloud/webhook/be234a0c-e36a-462b-8c68-1ef275076123";
+
+  // Webhook de destino do formulário (a ser preenchido posteriormente)
+  const WEBHOOK_URL = "COLOCAREI_AQUI";
+
+  /* ==========================================================
+     ESTADO
+  ========================================================== */
+
+  let tomSelectClientes = null;
+
+  /* ==========================================================
+     INICIALIZAÇÃO DO TOMSELECT (CLIENTE)
+  ========================================================== */
+
+  function initClienteTomSelect() {
+    tomSelectClientes = new TomSelect("#cliente-select", {
+      valueField: "id",
+      labelField: "description",
+      searchField: "description",
+      create: false, // não permite criar novos clientes
+      placeholder: "Pesquise pelo nome do cliente...",
+      loadThrottle: 300,
+      load: async function (query, callback) {
+        try {
+          const clientes = await fetchClientes();
+          callback(clientes);
+        } catch (erro) {
+          console.error("Erro ao carregar clientes:", erro);
+          callback();
+        }
+      },
+      onChange: function () {
+        clearFieldError("clienteId");
+      }
+    });
+
+    // Carrega a lista assim que o componente é montado
+    tomSelectClientes.load("");
+  }
+
+  // Busca a lista de clientes no webhook informado
+  async function fetchClientes() {
+    const resposta = await fetch(CLIENTS_WEBHOOK_URL, { method: "GET" });
+
+    if (!resposta.ok) {
+      throw new Error("Falha ao buscar clientes: " + resposta.status);
+    }
+
+    const dados = await resposta.json();
+    return Array.isArray(dados) ? dados : [];
+  }
+
+  /* ==========================================================
+     UPLOAD DE ARQUIVOS - PREVIEW
+  ========================================================== */
+
+  function initFileUpload() {
+    const inputArquivos = document.getElementById("anexos");
+    const listaArquivos = document.getElementById("file-list");
+
+    inputArquivos.addEventListener("change", function () {
+      listaArquivos.innerHTML = "";
+
+      Array.from(inputArquivos.files).forEach(function (arquivo) {
+        const item = document.createElement("span");
+        item.textContent = arquivo.name;
+        listaArquivos.appendChild(item);
+      });
+
+      if (inputArquivos.files.length > 0) {
+        clearFieldError("anexos");
+      }
+    });
+  }
+
+  /* ==========================================================
+     VALIDAÇÃO
+  ========================================================== */
+
+  // Lista dos campos obrigatórios simples (input/select/textarea nativos)
+  const CAMPOS_TEXTO_OBRIGATORIOS = [
+    "orcamento", "servico", "titulo", "escopo", "fase1", "fase2", "fase3",
+    "observacoes", "vistoriaRealizadaPor", "tempoExecucao", "contatoCiente",
+    "expectativaCliente", "possuiLayout", "possuiVideos", "previsaoSaida", "contrato"
+  ];
+
+  function setFieldError(nomeCampo) {
+    const container = document.querySelector('[data-field="' + nomeCampo + '"]');
+    if (container) {
+      container.classList.add("invalid");
+    }
+  }
+
+  function clearFieldError(nomeCampo) {
+    const container = document.querySelector('[data-field="' + nomeCampo + '"]');
+    if (container) {
+      container.classList.remove("invalid");
+    }
+  }
+
+  function clearAllErrors() {
+    document.querySelectorAll(".field.invalid").forEach(function (campo) {
+      campo.classList.remove("invalid");
+    });
+  }
+
+  // Valida o formulário inteiro e retorna true/false
+  function validarFormulario() {
+    clearAllErrors();
+    let formularioValido = true;
+
+    // Valida o cliente (TomSelect)
+    const clienteId = tomSelectClientes ? tomSelectClientes.getValue() : "";
+    if (!clienteId) {
+      setFieldError("clienteId");
+      formularioValido = false;
+    }
+
+    // Valida os campos de texto/select/textarea nativos
+    CAMPOS_TEXTO_OBRIGATORIOS.forEach(function (nomeCampo) {
+      const elemento = document.getElementsByName(nomeCampo)[0];
+      const valor = elemento ? elemento.value.trim() : "";
+
+      if (!valor) {
+        setFieldError(nomeCampo);
+        formularioValido = false;
+      }
+    });
+
+    // Valida os anexos
+    const inputArquivos = document.getElementById("anexos");
+    if (!inputArquivos.files || inputArquivos.files.length === 0) {
+      setFieldError("anexos");
+      formularioValido = false;
+    }
+
+    return formularioValido;
+  }
+
+  /* ==========================================================
+     MONTAGEM DO FORMDATA
+  ========================================================== */
+
+  function montarFormData() {
+    const formData = new FormData();
+
+    // ID do cliente selecionado (não o nome)
+    formData.append("customerId", tomSelectClientes.getValue());
+
+    CAMPOS_TEXTO_OBRIGATORIOS.forEach(function (nomeCampo) {
+      const elemento = document.getElementsByName(nomeCampo)[0];
+      formData.append(nomeCampo, elemento.value.trim());
+    });
+
+    // Anexos - cada arquivo é adicionado individualmente
+    const inputArquivos = document.getElementById("anexos");
+    Array.from(inputArquivos.files).forEach(function (arquivo) {
+      formData.append("anexos", arquivo, arquivo.name);
+    });
+
+    return formData;
+  }
+
+  /* ==========================================================
+     ENVIO DO FORMULÁRIO
+  ========================================================== */
+
+  function setLoading(estaCarregando) {
+    const botao = document.getElementById("btn-submit");
+    const textoBotao = document.getElementById("btn-submit-text");
+
+    botao.disabled = estaCarregando;
+    botao.classList.toggle("loading", estaCarregando);
+    textoBotao.textContent = estaCarregando ? "Criando projeto..." : "Criar Projeto";
+  }
+
+  function exibirFeedback(mensagem, tipo) {
+    const feedback = document.getElementById("submit-feedback");
+    feedback.textContent = mensagem;
+    feedback.className = "submit-feedback" + (tipo ? " " + tipo : "");
+  }
+
+  async function enviarFormulario(evento) {
+    evento.preventDefault();
+
+    exibirFeedback("", "");
+
+    if (!validarFormulario()) {
+      exibirFeedback("Verifique os campos destacados antes de enviar.", "error");
+      return;
+    }
+
+    if (!WEBHOOK_URL || WEBHOOK_URL === "COLOCAREI_AQUI") {
+      exibirFeedback("URL do webhook de envio ainda não configurada.", "error");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const formData = montarFormData();
+
+      const resposta = await fetch(WEBHOOK_URL, {
+        method: "POST",
+        body: formData
+      });
+
+      if (!resposta.ok) {
+        throw new Error("Erro no envio: " + resposta.status);
+      }
+
+      exibirFeedback("Projeto criado com sucesso!", "success");
+      document.getElementById("project-form").reset();
+      document.getElementById("file-list").innerHTML = "";
+      if (tomSelectClientes) {
+        tomSelectClientes.clear();
+      }
+    } catch (erro) {
+      console.error("Erro ao enviar o formulário:", erro);
+      exibirFeedback("Não foi possível criar o projeto. Tente novamente.", "error");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  /* ==========================================================
+     LIMPEZA DE ERROS AO DIGITAR
+  ========================================================== */
+
+  function initLimpezaErros() {
+    CAMPOS_TEXTO_OBRIGATORIOS.forEach(function (nomeCampo) {
+      const elemento = document.getElementsByName(nomeCampo)[0];
+      if (!elemento) return;
+
+      const evento = (elemento.tagName === "SELECT") ? "change" : "input";
+      elemento.addEventListener(evento, function () {
+        if (elemento.value.trim()) {
+          clearFieldError(nomeCampo);
+        }
+      });
+    });
+  }
+
+  /* ==========================================================
+     INICIALIZAÇÃO GERAL
+  ========================================================== */
+
+  document.addEventListener("DOMContentLoaded", function () {
+    initClienteTomSelect();
+    initFileUpload();
+    initLimpezaErros();
+
+    document.getElementById("project-form").addEventListener("submit", enviarFormulario);
+  });
+</script>
+
+</body>
+</html>
